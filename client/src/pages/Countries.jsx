@@ -3,36 +3,27 @@ import { useState } from "react";
 import axios from "axios";
 import "./Countries.css";
 import { Link } from "react-router-dom";
+import { useVerifyToken } from "../CustomHooks";
 
 const Countries = () => {
   axios.defaults.withCredentials = true;
-  const [auth, setAuth] = useState(false);
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    axios.get("http://localhost:5000").then((res) => {
-      if (res.data.Status === "success verify") {
-        setAuth(true);
-        setName(res.data.name);
-      } else {
-        setAuth(false);
-        setMessage(res.data.Message);
-      }
-    });
-  }, []);
+  const { auth, name, message } = useVerifyToken();
 
   const handleLogout = () => {
-    axios
-      .get("http://localhost:5000/logout")
-      .then((res) => {
-        if (res.data.Status === "success logout") {
-          window.location.reload(true);
-        } else {
-          alert("Logout error");
-        }
-      })
-      .catch((err) => console.log(err));
+    try {
+      axios
+        .get("http://localhost:5000/logout")
+        .then((res) => {
+          if (res.data.Status === "success logout") {
+            window.location.reload(true);
+          } else {
+            alert("Logout error");
+          }
+        })
+        .catch((err) => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const [countries, setCountries] = useState([]);
