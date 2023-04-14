@@ -18,6 +18,7 @@ function Login() {
       .then((res) => {
         if (res.data.Status === "success login") {
           navigate("/");
+          window.location.reload();
         } else {
           alert(res.data.Message);
         }
