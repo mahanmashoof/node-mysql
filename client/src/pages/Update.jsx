@@ -8,7 +8,7 @@ const Update = () => {
   const location = useLocation();
   const countryId = location.pathname.split("/").slice(-1)[0];
 
-  //TODO: populate these values
+  //TODO: populate these values by creating custom hook for fetch all and usememo
   const [input, setInput] = useState({
     countryName: "",
     population: null,

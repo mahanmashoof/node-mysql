@@ -171,36 +171,44 @@ app.get("/home/:id", async (req, res) => {
   }
 });
 
-app.post("/home", (req, res) => {
-  const sql = "INSERT INTO countries (countryName, population) VALUES (?)";
-  const data = [req.body.countryName, req.body.population];
-  sqlAz.query(sql, [data], (error) => {
-    if (error) throw error;
-    res.send(`${req.body.countryName} was created`);
-  });
+app.post("/home", async (req, res) => {
+  const { countryName, population } = req.body;
+  const sql = `INSERT INTO countries (countryName, population) VALUES ('${countryName}', '${population}')`;
+  try {
+    await sqlAz.query(sql);
+    res.status(201).json({ message: "country created" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error creating country" });
+  }
 });
 
-app.delete("/home/:id", (req, res) => {
+app.put("/home/:id", async (req, res) => {
   const countryId = req.params.id;
-  const sql = "DELETE FROM countries WHERE id = ?";
-  sqlAz.query(sql, [countryId], (err, result) => {
-    if (err) throw err;
-    res.send("country was successfully deleted");
-  });
+  const { countryName, population } = req.body;
+  const sql = `UPDATE countries SET countryName = '${countryName}' , population = '${population}' WHERE id = '${countryId}'`;
+  try {
+    await sqlAz.query(sql);
+    res.json({ message: "Country updated" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error updating country" });
+  }
 });
 
-app.put("/home/:id", (req, res) => {
+app.delete("/home/:id", async (req, res) => {
   const countryId = req.params.id;
-  const sql =
-    "UPDATE countries SET countryName = ? , population = ? WHERE id = ?";
-  const data = [req.body.countryName, req.body.population];
-  sqlAz.query(sql, [...data, countryId], (error) => {
-    if (error) throw error;
-    res.send(`${req.body.countryName} was updated`);
-  });
+  const sql = `DELETE FROM countries WHERE id = '${countryId}'`;
+  try {
+    await sqlAz.query(sql);
+    res.json({ message: "Country deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error deleting country" });
+  }
 });
 
-//AUTH---
+//AUTH--- (update against azure)
 app.post("/login", (req, res) => {
   const sql = "SELECT * FROM users WHERE email = ? AND password = ?";
   db.query(sql, [req.body.email, req.body.password], (err, data) => {
