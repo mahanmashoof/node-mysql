@@ -7,6 +7,7 @@ import mssql from "mssql";
 
 //Azure connection ---
 const sqlAz = mssql;
+//TODO: user and password to env
 const config = {
   user: "l3admin",
   password: "internal100%",
@@ -208,7 +209,8 @@ app.delete("/home/:id", async (req, res) => {
   }
 });
 
-//AUTH--- (update against azure)
+//AUTH---
+//TODO: update against Azure
 app.post("/login", (req, res) => {
   const sql = "SELECT * FROM users WHERE email = ? AND password = ?";
   db.query(sql, [req.body.email, req.body.password], (err, data) => {

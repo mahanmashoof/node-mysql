@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useGetAllCountries } from "../api/CustomHooks";
 
 const Update = () => {
   axios.defaults.withCredentials = true;
@@ -8,11 +9,24 @@ const Update = () => {
   const location = useLocation();
   const countryId = location.pathname.split("/").slice(-1)[0];
 
-  //TODO: populate these values by creating custom hook for fetch all and usememo
+  const { countries } = useGetAllCountries();
+  const currentCountry = useMemo(() => {
+    return countries.filter((country) => country.id.toString() === countryId);
+  }, [countries, countryId]);
+
   const [input, setInput] = useState({
     countryName: "",
     population: null,
   });
+
+  useEffect(() => {
+    if (currentCountry.length > 0) {
+      setInput({
+        countryName: currentCountry[0].countryName,
+        population: currentCountry[0].population,
+      });
+    }
+  }, [currentCountry]);
 
   const handleChange = (e) => {
     setInput((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -31,18 +45,22 @@ const Update = () => {
   return (
     <div>
       <h1>Update country</h1>
-      <input
-        type="text"
-        placeholder="country"
-        name="countryName"
-        onChange={handleChange}
-      />
-      <input
-        type="number"
-        placeholder="population"
-        name="population"
-        onChange={handleChange}
-      />
+      {countries.length > 0 && (
+        <>
+          <input
+            type="text"
+            defaultValue={input.countryName}
+            name="countryName"
+            onChange={handleChange}
+          />
+          <input
+            type="number"
+            defaultValue={input.population}
+            name="population"
+            onChange={handleChange}
+          />
+        </>
+      )}
       <button onClick={handleSubmit}>Update</button>
     </div>
   );

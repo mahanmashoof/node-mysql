@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React from "react";
 import axios from "axios";
 import "./Countries.css";
 import { Link } from "react-router-dom";
 import { useVerifyToken } from "../CustomHooks";
+import { useGetAllCountries } from "../api/CustomHooks";
 
 const Countries = () => {
   axios.defaults.withCredentials = true;
@@ -26,19 +26,7 @@ const Countries = () => {
     }
   };
 
-  const [countries, setCountries] = useState([]);
-
-  useEffect(() => {
-    const fetchAllCountries = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/home");
-        setCountries(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchAllCountries();
-  }, []);
+  const { countries } = useGetAllCountries();
 
   const handleDelete = async (id) => {
     try {
