@@ -36,9 +36,9 @@ const db = mysql.createPool({
   password: "password",
   database: "node1db",
 });
+//---MySQL connection
 
 const port = process.env.PORT || 5000;
-//---MySQL connection
 
 //MIDDLEWARES---
 //allows to send json files using a client:

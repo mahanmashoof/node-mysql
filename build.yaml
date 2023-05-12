@@ -20,3 +20,9 @@ steps:
       npm install
       nodemon index.js
     displayName: "Build back-end"
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: 'Microsoft Partner Network'
+    appName: 'l3nodetest'
+    package: '$(System.DefaultWorkingDirectory)/client/build'
