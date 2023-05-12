@@ -1,11 +1,22 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: "ubuntu-latest"
+
 steps:
-  - name: Install dependencies and build front-end
-    dir: client
-    run: |
-      npm ci
+  - checkout: self
+
+  - script: |
+      cd client
+      npm install
       npm run build
-  - name: Install dependencies and build back-end
-    dir: backend
-    run: |
-      npm ci
+    displayName: "Build front-end"
+
+  - script: |
+      cd backend
+      npm install
       nodemon index.js
+    displayName: "Build back-end"
