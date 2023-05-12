@@ -44,7 +44,7 @@ jobs:
       - run: |
           cd backend
           npm install
-          nodemon index.js
+          node index.js
         name: "Build back-end"
 
       - name: Upload artifact for deployment job
