@@ -1,0 +1,11 @@
+steps:
+  - name: Install dependencies and build front-end
+    dir: client
+    run: |
+      npm ci
+      npm run build
+  - name: Install dependencies and build back-end
+    dir: backend
+    run: |
+      npm ci
+      nodemon index.js
