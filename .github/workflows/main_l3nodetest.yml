@@ -49,12 +49,12 @@ jobs:
       - name: Create artifact directory
         run: mkdir artifact
 
-        name: "Copy files"
+      - name: "Copy files"
         run: |
           cp -R client/build ./artifact
           cp -R backend ./artifact
 
-        name: "Create archive"
+      - name: "Create archive"
         run: |
           cd artifact
           Compress-Archive -Path ./* -DestinationPath ../release.zip
