@@ -46,14 +46,26 @@ jobs:
           npm install
         name: "Build back-end"
 
-      - name: Zip artifact for deployment
-        run: Compress-Archive -Path * -DestinationPath release.zip
+      - name: Create artifact directory
+        run: mkdir artifact
+
+      - name: Copy files to artifact directory
+        run: |
+          cp -R client/build ./artifact
+          cp -R backend ./artifact
+        name: "Copy files"
+
+      - name: Create ZIP archive
+        run: |
+          cd artifact
+          Compress-Archive -Path ./* -DestinationPath ../release.zip
+        name: "Create archive"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
           name: node-app
-          path: .
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
