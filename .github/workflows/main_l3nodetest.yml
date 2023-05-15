@@ -49,15 +49,15 @@ jobs:
       - name: Create artifact directory
         run: mkdir artifact
 
+        name: "Copy files"
         run: |
           cp -R client/build ./artifact
           cp -R backend ./artifact
-        name: "Copy files"
 
+        name: "Create archive"
         run: |
           cd artifact
           Compress-Archive -Path ./* -DestinationPath ../release.zip
-        name: "Create archive"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
