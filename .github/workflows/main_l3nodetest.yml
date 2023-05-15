@@ -47,7 +47,7 @@ jobs:
         name: "Build back-end"
 
       - name: Zip artifact for deployment
-        run: Compress-Archive release.zip
+        run: Compress-Archive -Path * -DestinationPath release.zip
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
